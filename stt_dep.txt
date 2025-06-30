@@ -1,6 +1,6 @@
 absl-py==1.4.0
 accelerate==1.8.1
-aiofiles==24.1.0
+aiofiles==23.2.1
 aiohappyeyeballs==2.6.1
 aiohttp==3.11.15
 aiosignal==1.3.2
@@ -10,7 +10,7 @@ albumentations==2.0.8
 ale-py==0.11.1
 altair==5.5.0
 annotated-types==0.7.0
-antlr4-python3-runtime==4.9.3
+antlr4-python3-runtime==4.8
 anyio==4.9.0
 argon2-cffi==25.1.0
 argon2-cffi-bindings==21.2.0
@@ -30,6 +30,7 @@ beautifulsoup4==4.13.4
 betterproto==2.0.0b6
 bigframes==2.8.0
 bigquery-magics==0.9.0
+bitarray==3.4.3
 bleach==6.2.0
 blinker==1.9.0
 blis==1.3.0
@@ -49,11 +50,12 @@ chardet==5.2.0
 charset-normalizer==3.4.2
 chex==0.1.89
 clarabel==0.11.1
-click==8.2.1
+click==7.1.2
 cloudpathlib==0.21.1
 cloudpickle==3.1.1
 cmake==3.31.6
 cmdstanpy==1.2.5
+colorama==0.4.6
 colorcet==3.1.0
 colorlover==0.3.0
 colour==0.1.5
@@ -63,6 +65,7 @@ cons==0.4.6
 contourpy==1.3.2
 cramjam==2.10.0
 cryptography==43.0.3
+ctranslate2==3.9.0
 cuda-python==12.6.2.post1
 cudf-cu12 @ https://pypi.nvidia.com/cudf-cu12/cudf_cu12-25.2.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
 cudf-polars-cu12==25.2.2
@@ -96,6 +99,7 @@ distributed-ucxx-cu12==0.42.0
 distro==1.9.0
 dlib==19.24.6
 dm-tree==0.1.9
+docopt==0.6.2
 docstring_parser==0.16
 docutils==0.21.2
 dopamine_rl==4.1.2
@@ -110,6 +114,7 @@ entrypoints==0.4
 et_xmlfile==2.0.0
 etils==1.12.2
 etuples==0.3.9
+fairseq @ file:///content/IndicTrans2/fairseq
 Farama-Notifications==0.0.4
 fastai==2.7.19
 fastapi==0.115.13
@@ -173,8 +178,8 @@ google-pasta==0.2.0
 google-resumable-media==2.7.2
 googleapis-common-protos==1.70.0
 googledrivedownloader==1.1.0
-gradio==5.31.0
-gradio_client==1.10.1
+gradio==4.26.0
+gradio_client==0.15.1
 graphviz==0.21
 greenlet==3.2.3
 groovy==0.1.2
@@ -206,6 +211,7 @@ httplib2==0.22.0
 httpx==0.28.1
 huggingface-hub==0.33.0
 humanize==4.12.3
+hydra-core==1.0.7
 hyperframe==6.1.0
 hyperopt==0.2.7
 ibis-framework==9.5.0
@@ -218,6 +224,9 @@ immutabledict==4.2.1
 importlib_metadata==8.7.0
 importlib_resources==6.5.2
 imutils==0.5.4
+indic-nlp-library-itt==0.1.0
+indic_nlp_library @ file:///content/IndicTrans2/indic_nlp_library
+IndicTransToolkit @ file:///content/IndicTrans2/IndicTransToolkit
 inflect==7.5.0
 iniconfig==2.1.0
 intel-cmplr-lib-ur==2025.2.0
@@ -298,7 +307,7 @@ Mako==1.1.3
 marisa-trie==1.2.1
 Markdown==3.8.2
 markdown-it-py==3.0.0
-MarkupSafe==3.0.2
+MarkupSafe==2.1.5
 matplotlib==3.10.0
 matplotlib-inline==0.1.7
 matplotlib-venn==1.1.2
@@ -311,7 +320,10 @@ mizani==0.13.5
 mkl==2025.0.1
 ml-dtypes==0.4.1
 mlxtend==0.23.4
+mock==5.2.0
 more-itertools==10.7.0
+Morfessor==2.0.6
+mosestokenizer==1.2.1
 moviepy==1.0.3
 mpmath==1.3.0
 msgpack==1.1.1
@@ -339,31 +351,43 @@ numba==0.60.0
 numba-cuda==0.2.0
 numexpr==2.11.0
 numpy==2.0.2
-nvidia-cublas-cu12==12.5.3.2
-nvidia-cuda-cupti-cu12==12.5.82
+nvidia-cublas-cu11==11.11.3.6
+nvidia-cublas-cu12==12.1.3.1
+nvidia-cuda-cupti-cu11==11.8.87
+nvidia-cuda-cupti-cu12==12.1.105
 nvidia-cuda-nvcc-cu12==12.5.82
-nvidia-cuda-nvrtc-cu12==12.5.82
-nvidia-cuda-runtime-cu12==12.5.82
-nvidia-cudnn-cu12==9.3.0.75
-nvidia-cufft-cu12==11.2.3.61
-nvidia-curand-cu12==10.3.6.82
-nvidia-cusolver-cu12==11.6.3.83
-nvidia-cusparse-cu12==12.5.1.3
+nvidia-cuda-nvrtc-cu11==11.8.89
+nvidia-cuda-nvrtc-cu12==12.1.105
+nvidia-cuda-runtime-cu11==11.8.89
+nvidia-cuda-runtime-cu12==12.1.105
+nvidia-cudnn-cu11==9.1.0.70
+nvidia-cudnn-cu12==9.1.0.70
+nvidia-cufft-cu11==10.9.0.58
+nvidia-cufft-cu12==11.0.2.54
+nvidia-curand-cu11==10.3.0.86
+nvidia-curand-cu12==10.3.2.106
+nvidia-cusolver-cu11==11.4.1.48
+nvidia-cusolver-cu12==11.4.5.107
+nvidia-cusparse-cu11==11.7.5.86
+nvidia-cusparse-cu12==12.1.0.106
 nvidia-cusparselt-cu12==0.6.2
 nvidia-ml-py==12.575.51
-nvidia-nccl-cu12==2.21.5
+nvidia-nccl-cu11==2.21.5
+nvidia-nccl-cu12==2.20.5
 nvidia-nvcomp-cu12==4.2.0.11
 nvidia-nvjitlink-cu12==12.5.82
-nvidia-nvtx-cu12==12.4.127
+nvidia-nvtx-cu11==11.8.86
+nvidia-nvtx-cu12==12.1.105
 nvtx==0.2.12
 nx-cugraph-cu12 @ https://pypi.nvidia.com/nx-cugraph-cu12/nx_cugraph_cu12-25.2.0-py3-none-any.whl
 oauth2client==4.1.3
 oauthlib==3.3.1
-omegaconf==2.3.0
+omegaconf==2.0.6
 openai==1.91.0
 opencv-contrib-python==4.11.0.86
 opencv-python==4.11.0.86
 opencv-python-headless==4.11.0.86
+openfile==0.0.7
 openpyxl==3.1.5
 opt_einsum==3.4.0
 optax==0.2.5
@@ -372,7 +396,7 @@ orbax-checkpoint==0.11.16
 orjson==3.10.18
 osqp==1.0.4
 packaging==24.2
-pandas==2.2.2
+pandas==2.3.0
 pandas-datareader==0.10.0
 pandas-gbq==0.29.1
 pandas-stubs==2.2.2.240909
@@ -388,7 +412,7 @@ peewee==3.18.1
 peft==0.15.2
 pexpect==4.9.0
 pickleshare==0.7.5
-pillow==11.2.1
+pillow==10.4.0
 platformdirs==4.3.8
 plotly==5.24.1
 plotnine==0.14.5
@@ -396,6 +420,7 @@ pluggy==1.6.0
 ply==3.11
 polars==1.21.0
 pooch==1.8.2
+portalocker==3.2.0
 portpicker==1.5.2
 preshed==3.0.10
 prettytable==3.16.0
@@ -484,6 +509,8 @@ rpds-py==0.25.1
 rpy2==3.5.17
 rsa==4.9.1
 ruff==0.12.0
+sacrebleu==2.3.1
+sacremoses==0.1.1
 safehttpx==0.1.6
 safetensors==0.5.3
 scikit-image==0.25.2
@@ -522,9 +549,12 @@ spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 spanner-graph-notebook==1.1.7
 Sphinx==8.2.3
+sphinx-argparse==0.5.2
+sphinx-rtd-theme==3.0.2
 sphinxcontrib-applehelp==2.0.0
 sphinxcontrib-devhelp==2.0.0
 sphinxcontrib-htmlhelp==2.1.0
+sphinxcontrib-jquery==4.1
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==2.0.0
 sphinxcontrib-serializinghtml==2.0.0
@@ -547,7 +577,8 @@ tenacity==8.5.0
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
 tensorflow==2.18.0
-tensorflow-datasets==4.9.9
+tensorflow-addons==0.23.0
+tensorflow-datasets==3.2.1
 tensorflow-hub==0.16.1
 tensorflow-io-gcs-filesystem==0.37.1
 tensorflow-metadata==1.17.2
@@ -560,6 +591,7 @@ terminado==0.18.1
 text-unidecode==1.3
 textblob==0.19.0
 tf-slim==1.1.0
+tf2crf==0.1.33
 tf_keras==2.18.0
 thinc==8.3.6
 threadpoolctl==3.6.0
@@ -569,27 +601,28 @@ timm==1.0.15
 tinycss2==1.4.0
 tokenizers==0.21.2
 toml==0.10.2
-tomlkit==0.13.3
+tomlkit==0.12.0
+toolwrapper==2.1.0
 toolz==0.12.1
-torch @ https://download.pytorch.org/whl/cu124/torch-2.6.0%2Bcu124-cp311-cp311-linux_x86_64.whl
+torch==2.4.1+cu121
 torchao==0.10.0
-torchaudio @ https://download.pytorch.org/whl/cu124/torchaudio-2.6.0%2Bcu124-cp311-cp311-linux_x86_64.whl
+torchaudio==2.4.1+cu121
 torchdata==0.11.0
 torchsummary==1.5.1
 torchtune==0.6.1
-torchvision @ https://download.pytorch.org/whl/cu124/torchvision-0.21.0%2Bcu124-cp311-cp311-linux_x86_64.whl
+torchvision==0.19.1+cu121
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.7.1
 traittypes==0.2.1
-transformers==4.52.4
+transformers==4.53.0
 treelite==4.4.1
 treescope==0.1.9
-triton==3.2.0
+triton==3.0.0
 tsfresh==0.21.0
 tweepy==4.15.0
-typeguard==4.4.4
-typer==0.16.0
+typeguard==2.13.3
+typer==0.10.0
 types-pytz==2025.2.0.20250516
 types-setuptools==80.9.0.20250529
 typing-inspection==0.4.1
@@ -597,10 +630,12 @@ typing_extensions==4.14.0
 tzdata==2025.2
 tzlocal==5.3.1
 uc-micro-py==1.0.3
+uctools==1.3.0
 ucx-py-cu12==0.42.0
 ucxx-cu12==0.42.0
 umap-learn==0.5.7
 umf==0.11.0
+urduhack==1.1.1
 uritemplate==4.2.0
 urllib3==2.4.0
 uvicorn==0.34.3
@@ -613,7 +648,7 @@ weasel==0.4.1
 webcolors==24.11.1
 webencodings==0.5.1
 websocket-client==1.8.0
-websockets==15.0.1
+websockets==11.0.3
 Werkzeug==3.1.3
 widgetsnbextension==3.6.10
 wordcloud==1.9.4
