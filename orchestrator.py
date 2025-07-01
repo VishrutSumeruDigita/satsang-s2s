@@ -287,67 +287,94 @@ def translate_audio_file(audio_file_path, target_language="Hindi", save_results=
     return orchestrator.process_audio(audio_file_path, target_language, save_results)
 
 def main():
-    """Main function with examples and testing"""
+    """Main function for model initialization and testing"""
     print("=" * 70)
-    print("🎼 TRANSLATION ORCHESTRATOR - COMPLETE PIPELINE")
+    print("🎼 TRANSLATION ORCHESTRATOR - MODEL SETUP")
     print("=" * 70)
-    print("Audio (Hindi/English) → English → Target Language")
+    print("Initializing models for Audio → English → Target Language pipeline")
     
-    # Initialize orchestrator
-    orchestrator = TranslationOrchestrator()
-    
-    # Test with existing audio file
-    test_file = "indic_tts_out.wav"
-    
-    if os.path.exists(test_file):
-        print(f"\n🧪 TESTING WITH: {test_file}")
+    try:
+        print("\n🚀 INITIALIZING TRANSLATION ORCHESTRATOR...")
+        print("This will download and load all required models:")
+        print("  • Whisper (for audio → English)")
+        print("  • Sarvam AI (for English → target language)")
+        print()
         
-        # Test different target languages
-        target_languages = ["Hindi", "Tamil", "Bengali"]
+        # Initialize orchestrator (this downloads/loads models)
+        start_time = time.time()
+        orchestrator = TranslationOrchestrator()
+        init_time = time.time() - start_time
         
-        for target_lang in target_languages:
-            print(f"\n{'='*40}")
-            print(f"Testing: {test_file} → {target_lang}")
-            print(f"{'='*40}")
+        print(f"\n✅ MODEL INITIALIZATION COMPLETE!")
+        print(f"⏱️  Total initialization time: {init_time:.2f} seconds")
+        
+        # Check if we have any audio files to test with
+        test_files = []
+        
+        # Look for test files in different locations
+        possible_test_files = [
+            "indic_tts_out.wav",
+            "test_audio.wav", 
+            "audio_inpts/*.wav"
+        ]
+        
+        import glob
+        for pattern in possible_test_files:
+            if "*" in pattern:
+                found_files = glob.glob(pattern)
+                if found_files:
+                    test_files.extend(found_files[:1])  # Take first file
+            else:
+                if os.path.exists(pattern):
+                    test_files.append(pattern)
+        
+        if test_files:
+            test_file = test_files[0]
+            print(f"\n🧪 TESTING WITH: {test_file}")
+            print("Testing translation pipeline...")
             
+            # Quick test with Tamil
             result = orchestrator.process_audio(
-                test_file, 
-                target_language=target_lang,
-                save_results=True,
-                output_dir=f"test_results_{target_lang.lower()}"
+                test_file,
+                target_language="Tamil", 
+                save_results=False
             )
             
             if result["success"]:
-                print(f"\n🎯 RESULT FOR {target_lang}:")
-                print(f"English: {result['english_text']}")
-                print(f"{target_lang}: {result['final_translation']}")
-                print(f"Time: {result['processing_time']:.2f}s")
+                print(f"\n🎯 TEST SUCCESSFUL!")
+                print(f"English: {result['english_text'][:80]}...")
+                print(f"Tamil: {result['final_translation'][:80]}...")
+                print(f"Processing time: {result['processing_time']:.2f}s")
             else:
-                print(f"\n❌ Failed for {target_lang}: {result['error']}")
-    
-    else:
-        print(f"\n💡 No test audio file found.")
-        print(f"Place an audio file named '{test_file}' to test the pipeline.")
+                print(f"\n⚠️  Test failed: {result['error']}")
+                print("Models are loaded but test audio couldn't be processed.")
         
-        print(f"\n📚 USAGE EXAMPLES:")
+        else:
+            print(f"\n💡 No test audio files found.")
+            print("Models are ready! You can now:")
+            print("  • Run bulk_translate.py to process audio files")
+            print("  • Use the Streamlit app: streamlit run app.py")
+        
+        print(f"\n📚 READY FOR USE:")
         print("=" * 30)
-        print("""
-# Simple function usage:
-from orchestrator import translate_audio_file
-result = translate_audio_file("your_audio.wav", "Hindi")
-print(result["final_translation"])
-
-# Class-based usage:
-from orchestrator import TranslationOrchestrator
-orchestrator = TranslationOrchestrator()
-result = orchestrator.process_audio("audio.wav", "Tamil")
-
-# Batch processing:
-results = orchestrator.process_batch(["audio1.wav", "audio2.wav"], "Bengali")
-        """)
-    
-    print(f"\n🌟 Supported target languages:")
-    print("Hindi, Tamil, Telugu, Bengali, Gujarati, Marathi, English, etc.")
+        print("• Bulk translation: python bulk_translate.py")
+        print("• Web interface: streamlit run app.py")
+        print("• Direct usage:")
+        print("  from orchestrator import TranslationOrchestrator")
+        print("  orchestrator = TranslationOrchestrator()")
+        print("  result = orchestrator.process_audio('audio.wav', 'Tamil')")
+        
+        print(f"\n🌟 Supported target languages:")
+        print("Hindi, Tamil, Telugu, Bengali, Gujarati, Marathi, English, etc.")
+        
+    except Exception as e:
+        print(f"\n❌ ERROR DURING INITIALIZATION:")
+        print(f"Error: {e}")
+        print("\n🔧 Troubleshooting:")
+        print("• Make sure all dependencies are installed: pip install -r requirements.txt")
+        print("• Install yt-dlp and pydub: pip install yt-dlp pydub")
+        print("• Check internet connection (models need to be downloaded)")
+        print("• Ensure sufficient disk space for model files")
 
 if __name__ == "__main__":
     main()

@@ -1,14 +1,35 @@
 import streamlit as st
 import tempfile
 import os
-from speech_pipeline import SpeechToSpeechPipeline, SUPPORTED_LANGUAGES
+from orchestrator import TranslationOrchestrator
 import time
 from audio_recorder_streamlit import audio_recorder
 import base64
 
+# Define supported languages for the orchestrator
+SUPPORTED_LANGUAGES = {
+    "Tamil": "Tamil",
+    "Telugu": "Telugu", 
+    "Kannada": "Kannada",
+    "Malayalam": "Malayalam",
+    "Gujarati": "Gujarati",
+    "Punjabi": "Punjabi",
+    "Bengali": "Bengali",
+    "Odia": "Odia",
+    "Assamese": "Assamese", 
+    "Marathi": "Marathi",
+    "English": "English",
+    "French": "French",
+    "German": "German",
+    "Russian": "Russian",
+    "Chinese (Simplified)": "Chinese",
+    "Japanese": "Japanese",
+    "Hindi": "Hindi"
+}
+
 # Page configuration
 st.set_page_config(
-    page_title="Hindi Speech-to-Speech Translation",
+    page_title="Audio Translation Pipeline",
     page_icon="🗣️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -55,15 +76,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Initialize session state
-if 'pipeline' not in st.session_state:
-    st.session_state.pipeline = None
+if 'orchestrator' not in st.session_state:
+    st.session_state.orchestrator = None
 if 'model_loaded' not in st.session_state:
     st.session_state.model_loaded = False
 
 # Header
-st.markdown('<div class="main-header">🗣️ Hindi Speech-to-Speech Translation</div>', 
+st.markdown('<div class="main-header">🗣️ Audio Translation Pipeline</div>', 
             unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Translate Hindi speech to other Indian languages using local AI models</div>', 
+st.markdown('<div class="sub-header">Translate Hindi/English audio to text in multiple languages using AI</div>', 
             unsafe_allow_html=True)
 
 # Sidebar for configuration
@@ -111,8 +132,8 @@ with st.sidebar:
     st.markdown("### 🤖 Model Information")
     st.markdown("""
     - **ASR**: Whisper (OpenAI)
-    - **Translation**: NLLB-200 (Meta)
-    - **TTS**: SpeechT5 (Microsoft)
+    - **Translation**: Sarvam AI
+    - **Pipeline**: Audio → English → Target Language
     - **Device**: GPU (if available)
     """)
     
@@ -121,9 +142,9 @@ with st.sidebar:
     # Features
     st.markdown("### ✨ Features")
     st.markdown("""
-    - ✅ Local processing (no APIs)
-    - ✅ Real-time transcription
-    - ✅ Multi-language support
+    - ✅ Local processing
+    - ✅ Audio transcription to English
+    - ✅ Multi-language translation
     - ✅ Audio recording
     - ✅ File upload support
     """)
@@ -145,7 +166,7 @@ with col1:
     audio_file_path = None
     
     if input_method == "Record Audio":
-        st.markdown("### Record your Hindi speech:")
+        st.markdown("### Record your Hindi/English speech:")
         audio_bytes = audio_recorder(
             text="Click to record",
             recording_color="#e74c3c",
@@ -163,7 +184,7 @@ with col1:
                 
     else:  # Upload Audio File
         uploaded_file = st.file_uploader(
-            "Upload Hindi audio file:",
+            "Upload Hindi/English audio file:",
             type=["wav", "mp3", "m4a", "ogg"]
         )
         
@@ -182,7 +203,7 @@ with col2:
         if st.button("🚀 Load Models", type="primary"):
             with st.spinner("Loading AI models... This may take a few minutes..."):
                 try:
-                    st.session_state.pipeline = SpeechToSpeechPipeline(target_language_code)
+                    st.session_state.orchestrator = TranslationOrchestrator()
                     st.session_state.model_loaded = True
                     st.success("✅ Models loaded successfully!")
                 except Exception as e:
@@ -192,47 +213,68 @@ with col2:
         
         # Process audio button
         if audio_file_path and st.button("🎯 Process Speech", type="primary"):
-            with st.spinner("Processing speech-to-speech translation..."):
+            with st.spinner("Processing audio translation..."):
                 try:
-                    # Process the audio
-                    hindi_transcription, translated_text, output_audio_path = st.session_state.pipeline.process_speech_to_speech(audio_file_path)
+                    # Process the audio using orchestrator
+                    result = st.session_state.orchestrator.process_audio(
+                        audio_file_path, 
+                        target_language=target_language_name,
+                        save_results=False
+                    )
                     
-                    # Display results
-                    st.markdown("### 📝 Results:")
-                    
-                    # Hindi transcription
-                    st.markdown('<div class="result-box">', unsafe_allow_html=True)
-                    st.markdown("**Hindi Transcription:**")
-                    st.write(hindi_transcription)
-                    st.markdown('</div>', unsafe_allow_html=True)
-                    
-                    # Translation
-                    st.markdown('<div class="result-box">', unsafe_allow_html=True)
-                    st.markdown(f"**{target_language_name} Translation:**")
-                    st.write(translated_text)
-                    st.markdown('</div>', unsafe_allow_html=True)
-                    
-                    # Output audio
-                    if os.path.exists(output_audio_path):
-                        st.markdown("**Generated Speech:**")
-                        with open(output_audio_path, "rb") as audio_file:
-                            audio_bytes = audio_file.read()
-                            st.audio(audio_bytes, format="audio/wav")
-                            
-                        # Download button for output audio
+                    if result["success"]:
+                        # Display results
+                        st.markdown("### 📝 Results:")
+                        
+                        # English transcription
+                        st.markdown('<div class="result-box">', unsafe_allow_html=True)
+                        st.markdown("**English Transcription:**")
+                        st.write(result["english_text"])
+                        st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Translation
+                        st.markdown('<div class="result-box">', unsafe_allow_html=True)
+                        st.markdown(f"**{target_language_name} Translation:**")
+                        st.write(result["final_translation"])
+                        st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Processing info
+                        st.markdown('<div class="result-box">', unsafe_allow_html=True)
+                        st.markdown("**Processing Info:**")
+                        st.write(f"⏱️ Processing time: {result['processing_time']:.2f} seconds")
+                        st.write(f"🔄 Pipeline: {result['pipeline']}")
+                        st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Download button for results
+                        results_text = f"""TRANSLATION RESULTS
+==================
+
+Audio File: {result['audio_file']}
+Target Language: {result['target_language']}
+Processing Time: {result['processing_time']:.2f}s
+Pipeline: {result['pipeline']}
+
+English Transcription:
+{result['english_text']}
+
+{result['target_language']} Translation:
+{result['final_translation']}
+"""
                         st.download_button(
-                            label="⬇️ Download Translated Audio",
-                            data=audio_bytes,
-                            file_name=f"translated_speech_{target_language_code}.wav",
-                            mime="audio/wav"
+                            label="⬇️ Download Translation Results",
+                            data=results_text,
+                            file_name=f"translation_results_{target_language_code}.txt",
+                            mime="text/plain"
                         )
+                    else:
+                        st.markdown('<div class="error-box">', unsafe_allow_html=True)
+                        st.error(f"❌ Translation failed: {result['error']}")
+                        st.markdown('</div>', unsafe_allow_html=True)
                     
                     # Cleanup temporary files
                     try:
                         if os.path.exists(audio_file_path):
                             os.unlink(audio_file_path)
-                        if os.path.exists(output_audio_path):
-                            os.unlink(output_audio_path)
                     except:
                         pass
                         
@@ -256,13 +298,13 @@ with col1:
 with col2:
     st.markdown('<div class="feature-box">', unsafe_allow_html=True)
     st.markdown("### 2️⃣ Input Audio")
-    st.write("Record Hindi speech using the microphone or upload an audio file.")
+    st.write("Record Hindi/English speech using the microphone or upload an audio file.")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col3:
     st.markdown('<div class="feature-box">', unsafe_allow_html=True)
     st.markdown("### 3️⃣ Get Results")
-    st.write("Click 'Process Speech' to get transcription, translation, and synthesized speech.")
+    st.write("Click 'Process Speech' to get English transcription and target language translation.")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # System information
@@ -288,7 +330,7 @@ with st.expander("🖥️ System Information"):
 st.markdown("---")
 st.markdown(
     "<div style='text-align: center; color: #6b7280;'>"
-    "🚀 Built with Streamlit • 🤖 Powered by Transformers • 💻 Local AI Processing"
+    "🚀 Built with Streamlit • 🤖 Powered by Whisper & Sarvam AI • 💻 Local Translation Pipeline"
     "</div>",
     unsafe_allow_html=True
 ) 
